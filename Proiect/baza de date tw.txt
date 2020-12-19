@@ -1,0 +1,52 @@
+IF OBJECT_ID('Aliment') IS NULL
+CREATE TABLE Aliment
+(
+AlimentId INT NOT NULL IDENTITY (1,1),
+AlimentDenumire NVARCHAR(100) NOT NULL,
+AlimentDataExp NVARCHAR (50) NOT NULL,
+AlimentCategorie NVARCHAR (50) NOT NULL,
+AlimentAlergeni NVARCHAR (50) NOT NULL,
+AlimentDisponibilitate BINARY,
+AlimentNrCalorii INT NOT NULL,
+CONSTRAINT PK_Alimente PRIMARY KEY (AlimentId)
+)
+GO
+   
+IF OBJECT_ID('Prieten') IS NULL
+	CREATE TABLE Prieten
+	(
+	PrietenId INT NOT NULL IDENTITY(1, 1),
+	PrietenNume NVARCHAR(100) NOT NULL,
+	PrietenTip NVARCHAR(100) NOT NULL,
+	PrietenAlergii INT NOT NULL,
+	
+	
+	CONSTRAINT PK_Prieteni PRIMARY KEY (PrietenId)
+	)
+GO
+
+IF OBJECT_ID('Comanda') IS NULL
+	CREATE TABLE Comanda
+	(
+	ComandaId INT NOT NULL IDENTITY(1, 1),
+	ComandaDenumir NVARCHAR(500) NOT NULL,
+	PrietenId INT NOT NULL,
+	AlimentId INT NOT NULL,
+	CONSTRAINT Pk_Comenzi PRIMARY KEY (ComandaId)
+	)
+GO
+
+
+
+// DE ADAUGAT
+//Avem 2 tabele si 1 tabela de legatura. O comanda apartine unui prieten si o comanda are 1 singur aliment. Daca vrem mai multe alimente atunci trebuie o noua tabela.
+alter table Comanda
+add ComandaPrietenId integer
+
+IF OBJECT_ID('FK_Comanda_Prieten') IS NULL
+	ALTER TABLE Comanda ADD CONSTRAINT FK_Comanda_Prieten FOREIGN KEY (PrietenId) REFERENCES Prieten(PrietenId)
+GO
+
+IF OBJECT_ID('FK_Comanda_Aliment') IS NULL
+	ALTER TABLE Comanda ADD CONSTRAINT FK_Comanda_Aliment FOREIGN KEY (AlimentId) REFERENCES Aliment(AlimentId)
+GO
